@@ -9,10 +9,11 @@
 #include "TWindow_.h"
 #include "TVertex_.h"
 #include "TSceneIntersec_.h"
-
+#include "TRay_.h"
 
 class TScene_ {
 
+    friend TRay_;
 private:
 
     Vector3f_ background_color_ = {0.51, 0.8, 0.51};

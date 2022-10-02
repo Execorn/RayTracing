@@ -7,18 +7,21 @@ SFMLFLAGS     = -lmingw32 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-mai
 GCCFLAGS      = -lmingw -lsfml-graphics -lsfml-window -lsfml-system -lsfml-main -mwindows
 COMPILER      = g++
 
-OBJ_FILES     = build/TColor_.o build/TSphere_.o build/TWindow_.o build/main.o build/TSceneIntersec_.o build/TScene_.o
+OBJ_FILES     = build/TColor_.o build/TSphere_.o build/TWindow_.o build/main.o build/TSceneIntersec_.o build/TScene_.o build/TRay_.o
 
 
 execute: rtracing
 	./build/rtracing
 
-rtracing: main.o TColor_.o TSphere_.o TWindow_.o TSceneIntersec_.o TScene_.o
+rtracing: main.o TColor_.o TSphere_.o TWindow_.o TSceneIntersec_.o TScene_.o TRay_.o
 	$(COMPILER) $(SFML_LIB) $(OBJ_FILES) $(CXXFLAGS) $(SFMLFLAGS) -o build/rtracing.exe 
 
 
 main.o: src/main.cpp
 	$(COMPILER) $(SFML_INCLUDE) $(CXXFLAGS) -c src/main.cpp -o build/main.o
+
+TRay_.o: src/TRay_.cpp src/TRay_.h
+	$(COMPILER) $(SFML_INCLUDE) $(CXXFLAGS) -c src/TRay_.cpp -o build/TRay_.o
 
 TScene_.o: src/TScene_.h src/TScene_.cpp
 	$(COMPILER) $(SFML_INCLUDE) $(CXXFLAGS) -c src/TScene_.cpp  -o build/TScene_.o
