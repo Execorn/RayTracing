@@ -9,7 +9,8 @@
 #include "TWindow_.h"
 #include "TVertex_.h"
 #include "TSceneIntersec_.h"
-#include "TRay_.h"
+
+class TRay_;
 
 class TScene_ {
 
@@ -41,10 +42,7 @@ public:
 
     void addLightSource(const Vector3f_ new_light_source);
 
-    // ray tracing functions
-    TSceneIntersection_ intersect(const Vector3f_ &src_vector, const Vector3f_ &unit);   
-
-    Vector3f_ cast_ray(const Vector3f_ &orig, const Vector3f_ &dir, const int depth = 0);
+    // ray tracing function
 
     void trace_scene(int width, int height, float fov, Vector3f_* vector_arr, Tvertex_* vertex_arr);
 };
