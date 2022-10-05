@@ -4,12 +4,12 @@ TSceneIntersection_ TRay_::intersect(TScene_& scene){
     Vector3f_ final_point, N;
     TMaterial_ material;
     
-    float nearest_dist = 1e10;
+    float approximation = 1e10;
     if (std::abs(this->direction_.y_) > .001) { // intersect the ray with the checkerboard, avoid division by zero
         float d = -(this->origin_.y_ + 4) / this->direction_.y_; // the checkerboard plane has equation y_ = -4
         Vector3f_ p = this->origin_ + this->direction_ * d;
-        if (d > 0.001 && d < nearest_dist && std::abs(p.x_) < 10 && p.z_ < -10 && p.z_ > -30) {
-            nearest_dist = d;
+        if (d > 0.001 && d < approximation && std::abs(p.x_) < 10 && p.z_ < -10 && p.z_ > -30) {
+            approximation = d;
             final_point = p;
             N = {0, 1, 0};
             material.diffuse_color_ = (int(0.5 * final_point.x_ + 1000) + int(0.5 * final_point.z_)) & 1 ? 
@@ -19,22 +19,22 @@ TSceneIntersection_ TRay_::intersect(TScene_& scene){
     }
     
     for (const TSphere_ &s : scene.spheres_) { // intersect the ray with all spheres
-        TSceneIntersection_ sph_intersect = {false, {0, 0, 0}};
+        TSceneIntersection_ sphere_intersection = {false, {0, 0, 0}};
 
-        float intersect_distance = s.intersection(this->origin_, this->direction_, &sph_intersect);
-        if (!sph_intersect.isHit || intersect_distance > nearest_dist) {
+        float intersect_distance = s.intersection(this->origin_, this->direction_, &sphere_intersection);
+        if (!sphere_intersection.isHit || intersect_distance > approximation) {
             continue;
         }
 
-        nearest_dist = intersect_distance;
-        final_point = this->origin_ + this->direction_ * nearest_dist;
+        approximation = intersect_distance;
+        final_point = this->origin_ + this->direction_ * approximation;
         
         N = (final_point - s.center_).normalize();
         material = s.material_;
     }
 
     return {
-        nearest_dist < 1000, 
+        approximation < 1000, 
         final_point, 
         N, 
         material };
