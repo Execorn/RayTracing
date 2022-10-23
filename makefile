@@ -14,7 +14,7 @@ OBJECTS = $(addprefix $(BINDIR),$(notdir $(SOURCES:.cpp=.o)))
 EXECUTABLE = RayTracing.exe
 
 execute: $(EXECUTABLE)
-	./RayTracing.exe
+	./$(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS) 
 	$(CC) $(LDLIB) $(OBJECTS) $(CXXFLAGS) $(LDFLAGS) -o $@
