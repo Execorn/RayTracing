@@ -47,6 +47,21 @@ void TScene_::addSphere(TSphere_ new_sphere, std::string material_name) {
 
 // ----------------------------------------------------------------
 
+void TScene_::addPlane(TPlane_ new_plane, std::string material_name) {
+    if (material_name == "") {
+        this->planes_.push_back(new_plane);
+    } else {
+        if (this->materials_.count(material_name) == 0) {
+            throw std::invalid_argument("material_name doesn't exist");
+        }
+        new_plane.material_ = this->materials_[material_name];
+
+        this->planes_.push_back(new_plane);
+    }  
+}
+
+// ----------------------------------------------------------------
+
 void TScene_::addLightSource(const Vector3f_ new_light_source) {
     this->light_sources_.push_back(new_light_source);
 }

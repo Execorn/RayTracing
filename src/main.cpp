@@ -6,6 +6,8 @@
 
 #include "TScene_.h"
 
+#define PI 3.1415926536
+
 // ----------------------------------------------------------------
 
 const int TRACER_WIDTH  = 1024;
@@ -28,11 +30,18 @@ int main() {
     ray_tracing_scene.addMaterial("red_rubber", {1.0, {1.4,  0.3, 0.0, 0.0}, {0.3, 0.1, 0.1},   10.});
     ray_tracing_scene.addMaterial("mirror",     {1.0, {0.0, 16.0, 0.8, 0.0}, {1.0, 1.0, 1.0}, 1425.});
 
+    TMaterial_ orange_material;
+    orange_material.diffuse_color_ = {0.3, 0.2, 0.1};
+    ray_tracing_scene.addMaterial("orange", orange_material);
+
     ray_tracing_scene.addSphere({{-3,    0,   -16}, 2, {}}, "ivory");
     ray_tracing_scene.addSphere({{-1.0, -1.5, -12}, 2, {}}, "glass");
     ray_tracing_scene.addSphere({{ 1.5, -0.5, -18}, 3, {}}, "red_rubber");
     ray_tracing_scene.addSphere({{ 7,    5,   -18}, 4, {}}, "mirror");
 
+    ray_tracing_scene.addPlane({0, 1, 0, 4, true}, "orange");
+    ray_tracing_scene.addPlane({0, 0, 1, 100, true}, "red_rubber");
+    ray_tracing_scene.addPlane({0, 0, 1, -31, true}, "ivory");
 
     while (window.isOpen()) {
         TEvent_ main_event;
@@ -42,7 +51,7 @@ int main() {
             }
         }
 
-        ray_tracing_scene.trace_scene(TRACER_WIDTH, TRACER_HEIGHT, 1.05f, vector_arr, vertex_arr);
+        ray_tracing_scene.trace_scene(TRACER_WIDTH, TRACER_HEIGHT, PI / 3.0, vector_arr, vertex_arr);
 
         TColor_ background(0, 0, 0);
         window.clear(background);

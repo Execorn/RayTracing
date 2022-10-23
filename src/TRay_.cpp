@@ -1,23 +1,26 @@
 #include "TRay_.h"
 
+static const float max_approximation = 1000;
+
 TSceneIntersection_ TRay_::intersect(TScene_& scene){
     Vector3f_ final_point, N;
     TMaterial_ material;
     
     float approximation = 1e10;
-    if (std::abs(this->direction_.y_) > .001) { // intersect the ray with the checkerboard, avoid division by zero
-        float d = -(this->origin_.y_ + 4) / this->direction_.y_; // the checkerboard plane has equation y_ = -4
-        Vector3f_ p = this->origin_ + this->direction_ * d;
-        if (d > 0.001 && d < approximation && std::abs(p.x_) < 10 && p.z_ < -10 && p.z_ > -30) {
-            approximation = d;
-            final_point = p;
-            N = {0, 1, 0};
-            material.diffuse_color_ = (int(0.5 * final_point.x_ + 1000) + int(0.5 * final_point.z_)) & 1 ? 
-                                        Vector3f_{0.3, 0.3, 0.3} : 
-                                        Vector3f_{0.3, 0.2, 0.1};
-        }
+
+    for (const TPlane_ &p  : scene.planes_) {
+        TSceneIntersection_ plane_intersection = {false, {0, 0, 0}};
+
+        float intersect_distance = p.intersection(this->origin_, this->direction_, &plane_intersection);
+        Vector3f_ result_vector = this->origin_ + this->direction_ * intersect_distance;
+        if (intersect_distance > .001 && intersect_distance < approximation) {
+            approximation = intersect_distance;
+            final_point = result_vector;
+            N = {0, 1, 0};                            
+            material.diffuse_color_ = p.material_.diffuse_color_;
+        }    
     }
-    
+
     for (const TSphere_ &s : scene.spheres_) { // intersect the ray with all spheres
         TSceneIntersection_ sphere_intersection = {false, {0, 0, 0}};
 
@@ -34,7 +37,7 @@ TSceneIntersection_ TRay_::intersect(TScene_& scene){
     }
 
     return {
-        approximation < 1000, 
+        approximation < max_approximation, 
         final_point, 
         N, 
         material };

@@ -9,6 +9,8 @@
 #include "TWindow_.h"
 #include "TVertex_.h"
 #include "TSceneIntersec_.h"
+#include "TPlane_.h"
+
 
 class TRay_;
 
@@ -25,12 +27,14 @@ private:
     std::vector<TSphere_> spheres_;
 
     std::vector<Vector3f_> light_sources_;
+    
+    std::vector<TPlane_> planes_;
 
 public:
 
     TScene_() {};
 
-    const int RECURSION_DEPTH_LIMIT_ = 4;
+    const int RECURSION_DEPTH_LIMIT_ = 5;
     
     Vector3f_ background() const { return this->background_color_; }
 
@@ -39,6 +43,8 @@ public:
     void addMaterial(const std::string new_name, const TMaterial_ new_material);
 
     void addSphere(TSphere_ new_sphere, std::string material_name = ""); 
+
+    void addPlane(TPlane_ new_plane, std::string material_name = "");
 
     void addLightSource(const Vector3f_ new_light_source);
 
