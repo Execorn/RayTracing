@@ -23,10 +23,6 @@ TPlane_::TPlane_(Vector3f_& origin, Vector3f_& vector_1, Vector3f_& vector_2, TM
 }
 
 float TPlane_::intersection(const Vector3f_ &origin, const Vector3f_ &direction, TSceneIntersection_* its) const {
-    // (0, 1, 0, -4) plane
-    // (0, 0, 0,  0) origin
-    // (0, -1, 0) dir
-    
     Vector3f_ n(this->a_, this->b_, this->c_);
 
     float denom = n * direction;
