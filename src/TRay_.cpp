@@ -1,6 +1,6 @@
 #include "TRay_.h"
 
-static const float max_approximation = 1000;
+static const float max_approximation = 3.402823E+38;
 
 TSceneIntersection_ TRay_::intersect(TScene_& scene){
     Vector3f_ final_point, N;
