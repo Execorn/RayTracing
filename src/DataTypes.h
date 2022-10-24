@@ -108,10 +108,8 @@ namespace DataTypes {
             
             // disables implicit conversion using this constructor
             explicit TVector_(const size_t size):
-                data_(nullptr), size_(size), capacity_(VECTOR_CAPACITY_RATE) {
-                while (this->capacity_ < this->size_) {
-                    this->capacity_ *= VECTOR_CAPACITY_RATE;
-                }
+                data_(nullptr), size_(size), capacity_(VECTOR_STARTUP_CAPACITY) {
+                this->capacity = 1 << (63 - __builtin_clzll(this->size_) + 1)
 
                 try {
                     data_ = new char[this->capacity_ * sizeof(Type)];
@@ -169,7 +167,6 @@ namespace DataTypes {
                 }
 
                 if (new_size <= this->capacity_) {
-                    // default constructor
                     initialize(this->data_, new_size, this->size_);
 
                     this->size_ = new_size;
@@ -178,6 +175,8 @@ namespace DataTypes {
 
                 size_t new_capacity = this->capacity_;
                 
+                new_capacity = 1 << (63 - __builtin_clzll(new_capacity) + 1);
+
                 while (new_capacity < new_size) {
                     new_capacity *= VECTOR_CAPACITY_RATE;
                 }
@@ -219,6 +218,8 @@ namespace DataTypes {
             }
 
             TVector_& operator=(const TVector_& vector) {
+                //TODO: check this == vector
+
                 this->change_size(vector.size());
 
                 for (size_t current_index = 0; current_index < this->size_; ++current_index) {
