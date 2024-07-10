@@ -109,7 +109,7 @@ namespace DataTypes {
             // disables implicit conversion using this constructor
             explicit TVector_(const size_t size):
                 data_(nullptr), size_(size), capacity_(VECTOR_STARTUP_CAPACITY) {
-                this->capacity = 1 << (63 - __builtin_clzll(this->size_) + 1)
+                this->capacity_ = 1 << (63 - __builtin_clzll(this->size_) + 1);
 
                 try {
                     data_ = new char[this->capacity_ * sizeof(Type)];
@@ -185,7 +185,7 @@ namespace DataTypes {
                 try {
                     new_pointer = new char[new_capacity * sizeof(Type)]();
                 }
-                catch (std::bad_alloc) {
+                catch (std::bad_alloc&) {
                     std::cerr << "Vector: Increase Error - lack of memory" << std::endl;
 
                     throw;
